@@ -25,8 +25,7 @@ class DeckOfCards:
         self.create_deck()
 
     def create_deck(self):
-        # tuple card: Hearts,Diamonds, Clubs, and Spades in that order, from lowest to highest rank
-
+        # tuple card
         for suit in self.SUITS:
             for rank in self.RANKS:
                 self.__cards.append((rank, suit))
@@ -46,14 +45,37 @@ class DeckOfCards:
 
 
 def main():
-    deck = DeckOfCards()
-    random.seed(1)
-    deck.shuffle_deck()
-    print(f"first: {deck}")
-    for _ in range(52):
-        card = deck.deal_card()
-        print(f"{card[0]} of {card[1]}")
-    print(f"second: {deck}")
+    language = get_language()
+    level = get_level()
+    if level and language:
+        deck = DeckOfCards()
+        random.seed(1)
+        deck.shuffle_deck()
+        print(f"first: {deck}")
+        for _ in range(52):
+            card = deck.deal_card()
+            print(f"{card[0]} of {card[1]}")
+        print(f"second: {deck}")
+
+
+def get_level():
+    levels = ["A2", "B1", "B2"]
+    while True:
+        level = input("Level: ")
+        if level.upper() in levels:
+            return level
+        else:
+            print(f"======== Select: {levels} ========")
+
+
+def get_language():
+    languages = ["Spanish", "English"]
+    while True:
+        language = input(f"pick a language {languages}: ")
+        if language.title() in languages:
+            return language
+        else:
+            print("======== Not an implemented language ========")
 
 
 if __name__ == "__main__":
