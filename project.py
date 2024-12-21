@@ -47,15 +47,17 @@ class DeckOfCards:
 def main():
     language = get_language()
     level = get_level()
-    if level and language:
+    rounds = int(input("Rounds to play: "))
+    for round in rounds:
+        level
+        language
         deck = DeckOfCards()
         random.seed(1)
         deck.shuffle_deck()
         print(f"first: {deck}")
-        for _ in range(52):
-            card = deck.deal_card()
-            print(f"{card[0]} of {card[1]}")
-        print(f"second: {deck}")
+
+        card = deck.deal_card()
+        print(f"{card[0]} of {card[1]}")
 
 
 def get_level():
