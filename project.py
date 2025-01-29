@@ -5,15 +5,15 @@ class DeckOfCards:
     SUITS = ["Hearts", "Diamonds", "Clubs", "Spades"]
     RANKS = [
         "Ace",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
         "Jack",
         "Queen",
         "King",
@@ -47,10 +47,22 @@ class DeckOfCards:
 def main():
     language = get_language()
     level = get_level()
-    rounds = int(input("Rounds to play: "))
-    for round in rounds:
+    questions = load_questions(language, level)
+
+    # Input validation for possible amount of rounds
+    while True:
+        try:
+            rounds = int(input("Rounds to play (1-52): "))
+            if 1 <= rounds <= 52:
+                break
+        except ValueError:
+            print("Please enter a number between 1 and 52")
+
+    # Game loop
+    for _ in range(rounds):
         level
         language
+
         deck = DeckOfCards()
         random.seed(1)
         deck.shuffle_deck()
