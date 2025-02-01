@@ -48,7 +48,7 @@ class DeckOfCards:
 
 def main():
     language = get_language()
-    level = get_level()
+    level = get_level(language)
     questions = load_questions(language, level)
 
     # Input validation for possible amount of rounds
@@ -84,16 +84,23 @@ def main():
     print("Game Over! See you next time")
 
 
-def get_level():
-    # TODO!
-    # if language en is selected, change language print to spanish
-    levels = ["a2", "b1", "b2"]
+def get_level(language):
+    levels = ["A2", "B1", "B2"]
+
+    # match user's language input to continue during the game
     while True:
-        level = input("Level: ")
-        if level.lower() in levels:
-            return level
-        else:
-            print(f"======== Select: {levels} ========")
+        if language == "en":
+            level = input(f"Level {levels}: ").upper()
+            if level in levels:
+                return level
+            else:
+                print(f"======== Select a level: {levels} ========")
+        if language == "es":
+            level = input(f"Nivel {levels}: ").upper()
+            if level in levels:
+                return level
+            else:
+                print(f"======== Selecciona un nivel: {levels} ========")
 
 
 def get_language():
@@ -114,11 +121,11 @@ def load_questions(language, level):
     try:
         with open(filename, "r", encoding="utf-8") as file:
             # read the csv
-            reader = csv.reader(file, quotechar='"')
+            reader = csv.reader(file, delimiter="#")
             # get header row ['Spades, 'Hearts', 'Clubs', 'Diamonds']
             suits = next(reader)
 
-            # dictionary to nest each suit in questions dict
+            # nested dict (suit: rank) in questions dict
             for suit in suits:
                 questions[suit] = {}
 
@@ -147,7 +154,7 @@ def load_questions(language, level):
                         continue
 
     except FileNotFoundError:
-        print(f"Error: question file {filename} not found")
+        print(f"Error: question file '{filename}' not found")
         # return empty dict to prevent crash
         return {}
 
