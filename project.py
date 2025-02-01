@@ -1,4 +1,6 @@
 import random
+import csv
+from pathlib import Path
 
 
 class DeckOfCards:
@@ -60,36 +62,96 @@ def main():
 
     # Game loop
     for _ in range(rounds):
-        level
-        language
-
         deck = DeckOfCards()
         random.seed(1)
         deck.shuffle_deck()
-        print(f"first: {deck}")
-
         card = deck.deal_card()
-        print(f"{card[0]} of {card[1]}")
+
+        if not card:
+            print("Deck is empty!")
+            break
+
+        rank, suit = card
+        try:
+            question = questions[suit][rank]
+        except KeyError:
+            question = f"No question was found for {rank} of {suit}"
+
+        print(f"Card: {rank} of {suit}")
+        print(f"Question: {question}")
+        input("\nPress Enter to continue...")
+
+    print("Game Over! See you next time")
 
 
 def get_level():
-    levels = ["A2", "B1", "B2"]
+    # TODO!
+    # if language en is selected, change language print to spanish
+    levels = ["a2", "b1", "b2"]
     while True:
         level = input("Level: ")
-        if level.upper() in levels:
+        if level.lower() in levels:
             return level
         else:
             print(f"======== Select: {levels} ========")
 
 
 def get_language():
-    languages = ["Spanish", "English"]
+    languages = ["es", "en"]
     while True:
         language = input(f"pick a language {languages}: ")
-        if language.title() in languages:
+        if language.lower() in languages:
             return language
         else:
             print("======== Not an implemented language ========")
+
+
+def load_questions(language, level):
+    # dictionary to store questions
+    questions = {}
+    filename = Path(f"questions/{language}_{level}.csv")
+
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            # read the csv
+            reader = csv.reader(file, quotechar='"')
+            # get header row ['Spades, 'Hearts', 'Clubs', 'Diamonds']
+            suits = next(reader)
+
+            # dictionary to nest each suit in questions dict
+            for suit in suits:
+                questions[suit] = {}
+
+            # process remaining rows
+
+            for row in reader:
+                # use enumerate to
+                if len(row) != len(suits):
+                    print(
+                        f"Skipping invalid row: {row} (columns: {len(row)}, expected: {len(suits)})"
+                    )
+                    continue
+                for i, cell in enumerate(row):
+                    suit = suits[i]
+
+                    try:
+                        # split in two parts at the ';'
+                        rank, question = cell.split(";", 1)
+
+                        # add to nested dictionary: questions[suit][rank] = question
+                        questions[suit][rank.strip()] = question.strip()
+
+                    except ValueError:
+                        print(f"Skipping invalid entry: {cell}")
+                        # continue with loop to next cell
+                        continue
+
+    except FileNotFoundError:
+        print(f"Error: question file {filename} not found")
+        # return empty dict to prevent crash
+        return {}
+
+    return questions
 
 
 if __name__ == "__main__":
