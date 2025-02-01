@@ -17,10 +17,10 @@ The objective of the game is to get the student used to answer general questions
 
 Each player draws a card and answer the corresponding question in four categories. The original categories where:
 
-- **Spades**(Describing things)
-- **Hearts**(What questions)
-- **Clubs**(Mixed questions)
-- **Diamonds**(Conditional questions)
+- ♠ **Spades**(Describing things) ♠
+- ♥ **Hearts**(What questions) ♥
+- ♣ **Clubs**(Mixed questions) ♣
+- ♦ **Diamonds**(Conditional questions) ♦
 
 #### About this implementation
 
