@@ -2,6 +2,9 @@ import random
 import csv
 from pathlib import Path
 
+# TODO:
+# When printing, it would be nice to remember what's the rank/type of question, the name of the card, next to art and the question in a box
+
 # Dictionaries to draw art
 SUIT_SYMBOL = {"Hearts": "♥", "Diamonds": "♦", "Clubs": "♣", "Spades": "♠"}
 RANK_SYMBOL = {
