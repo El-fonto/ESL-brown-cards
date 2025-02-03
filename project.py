@@ -5,24 +5,7 @@ from pathlib import Path
 # TODO:
 # When printing, it would be nice to remember what's the rank/type of question, the name of the card, next to art and the question in a box
 # Fix .csv es/b1 and es/b2
-
-# Dictionaries to draw art
-SUIT_SYMBOL = {"Hearts": "♥", "Diamonds": "♦", "Clubs": "♣", "Spades": "♠"}
-RANK_SYMBOL = {
-    "Ace": "A",
-    "Two": "2",
-    "Three": "3",
-    "Four": "4",
-    "Five": "5",
-    "Six": "6",
-    "Seven": "7",
-    "Eight": "8",
-    "Nine": "9",
-    "Ten": "10",
-    "Jack": "J",
-    "Queen": "Q",
-    "King": "K",
-}
+# Check if I could use 1 data structure only RANK_SYMBOL and SUIT_SYMBOL and update the class to not use the list and only use the keys of the dict
 
 
 class DeckOfCards:
@@ -42,6 +25,23 @@ class DeckOfCards:
         "Queen",
         "King",
     ]
+    # Dictionaries to draw art
+    SUIT_SYMBOL = {"Hearts": "♥", "Diamonds": "♦", "Clubs": "♣", "Spades": "♠"}
+    RANK_SYMBOL = {
+        "Ace": "A",
+        "Two": "2",
+        "Three": "3",
+        "Four": "4",
+        "Five": "5",
+        "Six": "6",
+        "Seven": "7",
+        "Eight": "8",
+        "Nine": "9",
+        "Ten": "10",
+        "Jack": "J",
+        "Queen": "Q",
+        "King": "K",
+    }
 
     def __init__(self):
         # private list to populate with cards
@@ -75,6 +75,7 @@ def main():
     level = get_level(language)
     questions = load_questions(language, level)
     rounds = get_rounds()
+    counter = 0
 
     # single deck and shuffle it once for playing
     deck = DeckOfCards()
@@ -82,12 +83,14 @@ def main():
 
     # Game loop
     for _ in range(rounds):
+        rounds_to_go = rounds - counter
         card = deck.deal_card()
 
         if not card:
             print("Deck is empty!")
             break
 
+        # unpack tuple
         rank, suit = card
 
         # get questions and prevent errors
@@ -96,12 +99,31 @@ def main():
         except KeyError:
             question = f"No question was found for {rank} of {suit}"
 
-        print(deck)
+        counter += 1
+        print("\n" + get_question_type(suit) + question)
         print("\n" + get_card_art(rank, suit))
-        print(f"\nQuestion: {question}")
-        input("\nPress Enter to continue...")
+        # print(deck)
+
+        input(f"{rounds_to_go} rounds are left\nPress Enter to continue...")
 
     print("Game Over! See you next time")
+
+
+def get_question_type(suit):
+    """match questions to print"""
+    question_type = {
+        "Diamonds": "Conditional question",
+        "Clubs": "Mixed question",
+        "Spades": "Describing a thing",
+        "Hearts": "What question",
+    }
+
+    symbol = DeckOfCards.SUIT_SYMBOL[suit]
+
+    if suit in question_type:
+        return f"{symbol} {question_type[suit]} {symbol}: "
+    else:
+        return "?"
 
 
 def get_level(language):
@@ -125,6 +147,7 @@ def get_level(language):
 
 
 def get_language():
+    """determine printing language"""
     # list to add more laguages, if necessary
     languages = ["es", "en"]
     while True:
@@ -136,7 +159,7 @@ def get_language():
 
 
 def load_questions(language, level):
-    # dictionary to store questions
+    """handle csv file and output a questions dictionary"""
     questions = {}
     filename = Path(f"questions/{language}_{level}.csv")
 
@@ -185,7 +208,7 @@ def load_questions(language, level):
 
 
 def get_rounds():
-    """Get user's round number"""
+    """Validate number of game loops"""
     while True:
         try:
             rounds = int(input("Rounds to play (1-52): "))
@@ -197,21 +220,22 @@ def get_rounds():
 
 def get_card_art(rank, suit):
     """Generate ASCII art for a playing card"""
-    rank_symbol = RANK_SYMBOL.get(rank, "?")
-    suit_symbol = SUIT_SYMBOL.get(suit, "?")
+    # default return is '?', in case no rank or suit are in dict
+    rank_symbol = DeckOfCards.RANK_SYMBOL.get(rank, "?")
+    suit_symbol = DeckOfCards.SUIT_SYMBOL.get(suit, "?")
 
     # Define card lines
     lines = [
         "┌─────────┐",
-        f"│{rank_symbol}{suit_symbol.ljust(8)}│",  # Left-aligned rank+suit
+        f"│{rank_symbol} {suit_symbol.ljust(7)}│",  # Left-aligned rank+suit
         "│         │",
         f"│    {suit_symbol}    │",  # Centered suit
         "│         │",
-        f"│{rank_symbol}{suit_symbol.rjust(8)}│",  # Right-aligned rank+suit
+        f"│{rank_symbol} {suit_symbol.rjust(7)}│",  # Right-aligned rank+suit
         "└─────────┘",
     ]
 
-    # Handle special case for "10" rank
+    # Special case for "10" rank
     if rank == "Ten":
         lines[1] = f"│{rank_symbol}{suit_symbol.ljust(7)}│"
         lines[5] = f"│{rank_symbol}{suit_symbol.rjust(7)}│"
