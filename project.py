@@ -2,10 +2,6 @@ import random
 import csv
 from pathlib import Path
 
-# TODO:
-# When printing, it would be nice to remember what's the rank/type of question, the name of the card, next to art and the question in a box
-# Fix .csv es/b1 and es/b2
-
 
 class DeckOfCards:
     # Dictionaries to draw art
