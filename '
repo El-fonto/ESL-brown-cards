@@ -57,7 +57,7 @@ class DeckOfCards:
 
 def main():
     # random seed for testing purposes
-    # random.seed(1)
+    random.seed(1)
     language = get_language()
     level = get_level(language)
     questions = load_questions(language, level)
@@ -71,12 +71,8 @@ def main():
     # Game loop
     for _ in range(rounds):
         rounds_to_go = rounds - round_counter
-        # updates to show correct number of rounds left
-        round_counter += 1
-
         card = deck.deal_card()
 
-        # may not be necessary, but it covers an empty deck
         if not card:
             print("Deck is empty!")
             break
@@ -90,45 +86,27 @@ def main():
         except KeyError:
             question = f"No question was found for {rank} of {suit}"
 
-        # question printing
-        print("\n" + get_question_type(suit, language) + question)
+        round_counter += 1
+        print("\n" + get_question_type(suit) + question)
         print(get_card_art(rank, suit))
+        input(f"Rounds left: {rounds_to_go}\nPress Enter to continue...")
 
-        if language == "en":
-            input(f"Rounds left: {rounds_to_go}\nPress Enter to continue...")
-
-        elif language == "es":
-            input(f"Nos quedan {rounds_to_go} rondas\nPresiona Enter para continuar...")
-
-    if language == "en":
-        print("Game Over! See you next time")
-
-    elif language == "es":
-        print("¡Fin del juego! Nos vemos la próxima")
+    print("Game Over! See you next time")
 
 
-def get_question_type(suit, language):
+def get_question_type(suit):
     """Match questions to print"""
-    en_question_type = {
+    question_type = {
         "Diamonds": "Conditional question",
         "Clubs": "Mixed question",
         "Spades": "Describing a thing",
         "Hearts": "What question",
     }
 
-    es_question_type = {
-        "Diamonds": "Pregunta condicional",
-        "Clubs": "Pregunta mixta",
-        "Spades": "Describe una cosa",
-        "Hearts": "Pregunta con qué",
-    }
-
     symbol = DeckOfCards.SUIT_SYMBOL[suit]
 
-    if language == "en" and suit in en_question_type:
-        return f"{symbol} {en_question_type[suit]} {symbol}: "
-    elif language == "es" and suit in es_question_type:
-        return f"{symbol} {es_question_type[suit]} {symbol}: "
+    if suit in question_type:
+        return f"{symbol} {question_type[suit]} {symbol}: "
     else:
         return "?"
 
@@ -218,16 +196,11 @@ def get_rounds(language):
     """Validate number of game loops"""
     while True:
         try:
-            if language == "en":
-                rounds = int(input("How many rounds are we playing? (1-52): "))
-                if 1 <= rounds <= 52:
-                    return rounds
-            elif language == "es":
-                rounds = int(input("¿Cuántas rondas vamos a jugar? (1-52): "))
-                if 1 <= rounds <= 52:
-                    return rounds
+            rounds = int(input("How many rounds are we playing? (1-52): "))
+            if 1 <= rounds <= 52:
+                return rounds
         except ValueError:
-            print("Please enter a number (1-52) | Selecciona un número (1-52)")
+            print("Please enter a number between 1 and 52")
 
 
 def get_card_art(rank, suit):
