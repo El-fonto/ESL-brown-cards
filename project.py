@@ -1,5 +1,6 @@
 import random
 import csv
+import os
 from pathlib import Path
 
 
@@ -92,9 +93,11 @@ def main():
 
         if language == "en":
             input(f"Rounds left: {rounds_to_go}\nPress Enter to continue...")
+            clear_terminal()
 
         elif language == "es":
             input(f"Nos quedan {rounds_to_go} rondas\nPresiona Enter para continuar...")
+            clear_terminal()
 
     if language == "en":
         print("Game Over! See you next time")
@@ -103,19 +106,23 @@ def main():
         print("¡Fin del juego! Nos vemos la próxima")
 
 
+def clear_terminal():
+    os.system("clear")
+
+
 def get_question_type(suit, language):
     """Match questions to print"""
     en_question_type = {
         "Diamonds": "Conditional question",
         "Clubs": "Mixed question",
-        "Spades": "Describing a thing",
+        "Spades": "Describing question",
         "Hearts": "What question",
     }
 
     es_question_type = {
         "Diamonds": "Pregunta condicional",
         "Clubs": "Pregunta mixta",
-        "Spades": "Describe una cosa",
+        "Spades": "Pregunta descriptiva",
         "Hearts": "Pregunta con qué",
     }
 
@@ -142,7 +149,7 @@ def get_level(language):
             else:
                 print(f"======== Select a level: {levels} ========")
         if language == "es":
-            level = input(f"Nivel {levels}: ").strip().upper()
+            level = input(f"Nivel {levels}: ").upper().strip()
             if level in levels:
                 return level
             else:
@@ -154,8 +161,9 @@ def get_language():
     # list to add more laguages, if necessary
     languages = ["es", "en"]
     while True:
-        language = input(f"pick a language {languages}: ").strip()
-        if language.lower() in languages:
+        # clean input to match file  signature
+        language = input(f"pick a language {languages}: ").lower().strip()
+        if language in languages:
             return language
         else:
             print("======== Not an implemented language ========")
@@ -228,25 +236,25 @@ def get_rounds(language):
 
 def get_card_art(rank, suit):
     """Generate ASCII art for a playing card"""
-    # default return is '?', in case no rank or suit are in dict
+    # prevent crashing by returning '?', in case no rank or suit are in dict
     rank_symbol = DeckOfCards.RANK_SYMBOL.get(rank, "?")
     suit_symbol = DeckOfCards.SUIT_SYMBOL.get(suit, "?")
 
-    # Define card lines
+    # define card lines
     lines = [
         "┌─────────┐",
-        f"│{rank_symbol} {suit_symbol.ljust(7)}│",  # Left-aligned rank+suit
+        f"│{rank_symbol} {suit_symbol.ljust(7)}│",  # left-aligned rank+suit
         "│         │",
-        f"│    {suit_symbol}    │",  # Centered suit
+        f"│    {suit_symbol}    │",  # centered suit
         "│         │",
-        f"│{rank_symbol} {suit_symbol.rjust(7)}│",  # Right-aligned rank+suit
+        f"│{rank_symbol} {suit_symbol.rjust(6)} │",  # right-aligned rank+suit
         "└─────────┘",
     ]
 
-    # Special case for "10" rank
+    # special case for "10" rank
     if rank == "Ten":
         lines[1] = f"│{rank_symbol}{suit_symbol.ljust(7)}│"
-        lines[5] = f"│{rank_symbol}{suit_symbol.rjust(7)}│"
+        lines[5] = f"│{rank_symbol}{suit_symbol.rjust(6)} │"
 
     return "\n".join(lines)
 
