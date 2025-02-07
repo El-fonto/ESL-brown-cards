@@ -1,7 +1,7 @@
 import random
 import csv
-import os
 from pathlib import Path
+import os
 
 
 class DeckOfCards:
@@ -53,10 +53,21 @@ class DeckOfCards:
 
 
 def main():
-    # random seed for testing purposes
-    # random.seed(1)
+    print("""
+
+          =================
+          CLI talking Cards
+          =================
+
+          """)
+
     language = get_language()
+    clear_terminal()
+    show_rules(language)
+
     level = get_level(language)
+    clear_terminal()
+
     questions = load_questions(language, level)
     rounds = get_rounds(language)
     round_counter = 1
@@ -106,6 +117,55 @@ def main():
         print("¡Fin del juego! Nos vemos la próxima")
 
 
+def show_rules(language):
+    """
+    Displays the rules of the game in the chosen language.
+    """
+    if language == "en":
+        rules = input("Do you want to see the rules? (Y/N): ").upper()
+        if rules == "Y":
+            print(
+                """
+            Welcome to the Talking Cards game!
+
+            How to play:
+
+            1.  A card is drawn from a shuffled deck.
+            2.  You answer the question that matches the card. There are four types of questions:
+                - ♠ Spades: Describe something.
+                - ♥ Hearts: Answer a question about 'What'.
+                - ♣ Clubs: Answer a mixed question.
+                - ♦ Diamonds: Answer a question about 'If'.
+            3.  Keep talking until you feel ready for the next question.
+            4.  Repeat steps 1-3 until the game ends.
+
+            Have fun and improve your speaking skills!
+            """
+            )
+
+    elif language == "es":
+        rules = input("¿Quieres ver las reglas? (S/N): ").upper()
+        if rules == "S":
+            print(
+                """
+            ¡Bienvenido al juego de Cartas para platicar!
+
+            Cómo jugar:
+
+            1. Se saca una carta de una baraja revuelta.
+            2. Respondes la pregunta según la categoría de la carta. Hay cuatro tipos de preguntas:
+                - ♠ Picas: Describe algo.
+                - ♥ Corazones: Responde una pregunta sobre 'Qué'.
+                - ♣ Tréboles: Responde una pregunta mixta.
+                - ♦ Diamantes: Responde una pregunta condicional: 'Si...'.
+            3. Habla hasta que ambos jugadores se sientan satisfechos y pasen la siguiente pregunta.
+            4. Repite los pasos 1-3 hasta que termine el juego.
+
+            ¡Diviértete y mejora tus habilidades para hablar!
+            """
+            )
+
+
 def clear_terminal():
     os.system("clear")
 
@@ -129,9 +189,9 @@ def get_question_type(suit, language):
     symbol = DeckOfCards.SUIT_SYMBOL[suit]
 
     if language == "en" and suit in en_question_type:
-        return f"{symbol} {en_question_type[suit]} {symbol}: "
+        return f"{symbol} {en_question_type[suit]} {symbol} : "
     elif language == "es" and suit in es_question_type:
-        return f"{symbol} {es_question_type[suit]} {symbol}: "
+        return f"{symbol} {es_question_type[suit]} {symbol} : "
     else:
         return "?"
 
@@ -161,7 +221,7 @@ def get_language():
     # list to add more laguages, if necessary
     languages = ["es", "en"]
     while True:
-        # clean input to match file  signature
+        # clean input to match file names
         language = input(f"pick a language {languages}: ").lower().strip()
         if language in languages:
             return language
@@ -261,3 +321,4 @@ def get_card_art(rank, suit):
 
 if __name__ == "__main__":
     main()
+
