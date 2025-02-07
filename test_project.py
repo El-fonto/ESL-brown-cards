@@ -1,4 +1,4 @@
-from project import DeckOfCards, load_questions, get_question_type
+from project import DeckOfCards, load_questions, get_question_type, get_card_art
 
 """Deck Functionality Tests"""
 
@@ -45,11 +45,6 @@ def test_deck_str():
     assert "51 cards left" in str(deck)
 
 
-"""Input validation tests"""
-
-# def test_language():
-
-
 """Question Loading"""
 
 
@@ -70,7 +65,12 @@ def test_get_card_art():
 
 
 def test_get_question_type():
-    question_type = get_question_type("Diamonds", "en")
-    assert (
-        "♦ Conditional question ♦" in question_type
-    )  # Verify the corrrect question type
+    # English question type check
+    question_type_english = get_question_type("Diamonds", "en")
+    assert "♦ Conditional question ♦" in question_type_english
+    assert question_type_english == "♦ Conditional question ♦ : "
+
+    # Spanish question type check
+    question_type_spanish = get_question_type("Clubs", "es")
+    assert question_type_spanish == "♣ Pregunta mixta ♣ : "
+
