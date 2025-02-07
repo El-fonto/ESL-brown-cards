@@ -5,7 +5,7 @@
 A command-line implementation of the ESL speaking activity *Talking Cards*, designed to facilitate language learning conversations in both online and in-person settings. This program digitizes and streamlines the original card-based activity [created by Michael J. Brown](http://iteslj.org/Lessons/Brown-TalkingCards.html), making it more accessible for language tutors and students by combining question banks, cards and presentation in one place.
 ## Overview
 
-*Talking Cards* is an interactive language language practicing tool that combines cards with questions to encourage natural conversation practice. The program supports both English Language Learners (ELL) and Spanish Language Learners (SLL), offering questions tailored to different proficiency levels (A2, B1, B2) according to the Common European Framework of Reference (CEFR).
+*Talking Cards* is an interactive language practicing tool that combines cards with questions to encourage natural conversation practice. The program supports both English Language Learners (ELL) and Spanish Language Learners (SLL), offering questions tailored to different proficiency levels (A2, B1, B2) according to the Common European Framework of Reference (CEFR).
 
 ## Key Features
 
