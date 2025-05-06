@@ -33,7 +33,6 @@ class DeckOfCards:
         self.create_deck()
 
     def create_deck(self):
-        # tuple card
         for suit in self.SUITS:
             for rank in self.RANKS:
                 self.__cards.append((rank, suit))
@@ -72,7 +71,6 @@ def main():
     rounds = get_rounds(language)
     round_counter = 1
 
-    # single deck and shuffle it once for playing
     deck = DeckOfCards()
     deck.shuffle_deck()
 
@@ -84,22 +82,18 @@ def main():
 
         card = deck.deal_card()
 
-        # may not be necessary, but it covers an empty deck
         if not card:
             print("Deck is empty!")
             break
 
-        # unpack tuple
         rank, suit = card
 
-        # get questions and prevent errors
         try:
             question = questions[suit][rank]
         except KeyError:
             question = f"No question was found for {rank} of {suit}"
 
-        # question printing
-        print("\n" + get_question_type(suit, language) + question)
+        print("\n" + show_question_type(suit, language) + question)
         print(get_card_art(rank, suit))
 
         if language == "en":
@@ -118,9 +112,6 @@ def main():
 
 
 def show_rules(language):
-    """
-    Displays the rules of the game in the chosen language.
-    """
     if language == "en":
         rules = input("Do you want to see the rules? (Y/N): ").upper()
         if rules == "Y":
@@ -170,8 +161,7 @@ def clear_terminal():
     os.system("clear")
 
 
-def get_question_type(suit, language):
-    """Match questions to print"""
+def show_question_type(suit, language):
     en_question_type = {
         "Diamonds": "Conditional question",
         "Clubs": "Mixed question",
@@ -197,7 +187,6 @@ def get_question_type(suit, language):
 
 
 def get_level(language):
-    # list to add more levels, if necessary
     levels = ["A2", "B1", "B2"]
 
     # match user's language input to continue during the game
@@ -218,10 +207,8 @@ def get_level(language):
 
 def get_language():
     """Determine printing language"""
-    # list to add more laguages, if necessary
     languages = ["es", "en"]
     while True:
-        # clean input to match file names
         language = input(f"pick a language {languages}: ").lower().strip()
         if language in languages:
             return language
@@ -229,14 +216,12 @@ def get_language():
             print("======== Not an implemented language ========")
 
 
-def load_questions(language, level):
-    """Handle csv file and output a questions dictionary"""
+def load_questions(language: str, level: str) -> dict:
     questions = {}
     filename = Path(f"questions/{language}_{level}.csv")
 
     try:
         with open(filename, "r") as file:
-            # read the csv
             reader = csv.reader(file, delimiter="#")
             # get header row ['Spades, 'Hearts', 'Clubs', 'Diamonds']
             suits = next(reader)
@@ -245,22 +230,17 @@ def load_questions(language, level):
             for suit in suits:
                 questions[suit] = {}
 
-            # process remaining rows
             for row in reader:
-                # prevent inappropriate card generation checking correct row length
                 if len(row) != len(suits):
-                    # debugging message
                     print(
                         f"Skipping invalid row: {row} (columns: {len(row)}, expected: {len(suits)})"
                     )
                     continue
 
-                # tuple `i, cell` that comes with `index,value` using enumerate()
                 for i, cell in enumerate(row):
                     suit = suits[i]
 
                     try:
-                        # split in two parts at the ';'
                         rank, question = cell.split(";", 1)
 
                         # add to nested dictionary: questions[suit][rank] (key) = question (value)
@@ -268,7 +248,6 @@ def load_questions(language, level):
 
                     except ValueError:
                         print(f"Skipping invalid entry: {cell}")
-                        # continue with loop to next cell
                         continue
 
     except FileNotFoundError:
@@ -295,12 +274,10 @@ def get_rounds(language):
 
 
 def get_card_art(rank, suit):
-    """Generate ASCII art for a playing card"""
-    # prevent crashing by returning '?', in case no rank or suit are in dict
+    """ASCII art playing card"""
     rank_symbol = DeckOfCards.RANK_SYMBOL.get(rank, "?")
     suit_symbol = DeckOfCards.SUIT_SYMBOL.get(suit, "?")
 
-    # define card lines
     lines = [
         "┌─────────┐",
         f"│{rank_symbol} {suit_symbol.ljust(7)}│",  # left-aligned rank+suit
@@ -321,4 +298,3 @@ def get_card_art(rank, suit):
 
 if __name__ == "__main__":
     main()
-

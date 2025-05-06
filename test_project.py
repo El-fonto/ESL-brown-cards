@@ -1,4 +1,4 @@
-from project import DeckOfCards, load_questions, get_question_type, get_card_art
+from project import DeckOfCards, load_questions, get_card_art, show_question_type
 
 """Deck Functionality Tests"""
 
@@ -6,7 +6,7 @@ from project import DeckOfCards, load_questions, get_question_type, get_card_art
 # test deck creation
 def test_create_deck():
     deck = DeckOfCards()
-    assert len(deck._DeckOfCards__cards) == 52
+    assert len(deck.__cards) == 52
 
 
 # shuffled cards should be random
@@ -14,18 +14,17 @@ def test_shuffle_deck():
     deck1 = DeckOfCards()
     deck2 = DeckOfCards()
     deck2.shuffle_deck()
-    assert deck1._DeckOfCards__cards != deck2._DeckOfCards__cards
+    assert deck1.__cards != deck2.__cards
 
 
 def test_deal_card():
     deck = DeckOfCards()
-    initial_count = len(deck._DeckOfCards__cards)
+    initial_count = len(deck.__cards)
     card = deck.deal_card()
     # card was dealt
-    assert len(deck._DeckOfCards__cards) == initial_count - 1
+    assert len(deck.__cards) == initial_count - 1
     # card is not empty
     assert card is not None
-    # card is tuple
     assert isinstance(card, tuple)
 
 
@@ -66,11 +65,10 @@ def test_get_card_art():
 
 def test_get_question_type():
     # English question type check
-    question_type_english = get_question_type("Diamonds", "en")
+    question_type_english = show_question_type("Diamonds", "en")
     assert "♦ Conditional question ♦" in question_type_english
     assert question_type_english == "♦ Conditional question ♦ : "
 
     # Spanish question type check
-    question_type_spanish = get_question_type("Clubs", "es")
+    question_type_spanish = show_question_type("Clubs", "es")
     assert question_type_spanish == "♣ Pregunta mixta ♣ : "
-
